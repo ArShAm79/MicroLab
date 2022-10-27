@@ -1,0 +1,28 @@
+/*
+ * Multiple Blink - Mike Cook
+ *
+ * controls 8 LEDs and blinks each one at an independent rate set by
+ * the value in the flashTime array
+ */
+
+int pins[] = {18, 19, 22, 23, 25, 26, 27, 28 };  // set up the 8 pins to use as outputs - these are for a mega change according to what setup you have
+int flashTime[] = { 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000};  // set up the blink time of each LED
+unsigned long int changeTime[] = {0, 0, 0, 0, 0, 0, 0, 0};  // array to hold when next to change the state of each LED
+
+void setup()                    // is run once, when the sketch starts
+{
+  for(int i=0; i<8; i++){
+  pinMode(pins[i], OUTPUT);                    // sets the digital pins as output
+  changeTime[i] = millis() + flashTime[i];    // set the time for the next change
+  }
+}
+
+void loop()                     // run over and over again
+{  
+  for(int i=0 ; i<8; i++){ // look at each LED timer in turn
+    if(millis()>changeTime[i]) {       // it is time to change the state of the LED
+        digitalWrite(pins[i], !digitalRead(pins[i]) );  // make the LED the inverse of the current state (it's the ! that inverts)
+        changeTime[i] = millis() + flashTime[i];        // set the time to make the next change
+    }  // end of time to change the state of the LED if statement
+  }  // end of for loop looking at all the LEDs
+}  // end of loop() function
